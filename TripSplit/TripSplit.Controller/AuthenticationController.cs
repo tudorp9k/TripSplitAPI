@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using TripSplit.Domain.Dto;
 using TripSplit.Domain.Interfaces;
 
@@ -9,10 +10,12 @@ namespace TripSplit.Controller
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService authenticationService;
+        private readonly IConfiguration configuration;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService, IConfiguration configuration)
         {
             this.authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         [HttpPost("login")]
@@ -30,10 +33,38 @@ namespace TripSplit.Controller
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
+            var request = new RegisterRequest
+            {
+                RegisterDto = registerDto,
+                HttpRequest = Request
+            };
             if (ModelState.IsValid)
             {
-                await authenticationService.Register(registerDto);
+                await authenticationService.Register(request);
                 return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [Route("ConfirmEmail")]
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string id, [FromQuery] string confirmationToken)
+        {
+            if (ModelState.IsValid)
+            {
+                EmailConfirmationRequest request = new EmailConfirmationRequest()
+                {
+                    UserId = id,
+                    ConfirmationToken = confirmationToken
+                };
+
+                await authenticationService.ConfirmEmail(request);
+
+                return Ok();
+                // var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
+
+                // return Redirect($"{frontendAppUrl.Value}/email-confirmation-page");
             }
 
             return BadRequest();
