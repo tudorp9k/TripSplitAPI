@@ -30,6 +30,17 @@ namespace TripSplitAPI
             .Build();
             builder.Services.AddSingleton(configuration);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: "CorsPolicy",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
             builder.Services.AddScoped<IEmailService, EmailService>();
@@ -49,7 +60,7 @@ namespace TripSplitAPI
 
             app.UseHttpsRedirection();
 
-            app.UseCors();
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
