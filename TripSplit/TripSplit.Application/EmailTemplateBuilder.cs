@@ -16,8 +16,7 @@ namespace TripSplit.Application
 
             var htmlContent = File.ReadAllText(templateFilePath);
             htmlContent = htmlContent.Replace("[User's Name]", user.FirstName)
-                                     .Replace("[Verification Link]", $"{verificationLink}")
-                                     .Replace("[Your Company Name]", "Nagarro Trip Planner");
+                                     .Replace("[Verification Link]", $"{verificationLink}");
 
             BodyBuilder bodyBuilder = new()
             {
@@ -25,6 +24,39 @@ namespace TripSplit.Application
             };
 
             return bodyBuilder;
+        }
+
+        public BodyBuilder PasswordResetMailTemplate(User user, string resetToken, string baseUrl)
+        {
+            var templateFilePath = Path.Combine("..", "TripSplit.Application", "Templates", "PasswordResetTemplate.html");
+
+            UriBuilder resetLink = BuildPasswordResetLink(user, resetToken, baseUrl);
+
+            var htmlContent = File.ReadAllText(templateFilePath);
+            htmlContent = htmlContent.Replace("[User's Name]", user.FirstName)
+                                     .Replace("[Reset Link]", $"{resetLink}");
+
+            BodyBuilder bodyBuilder = new()
+            {
+                HtmlBody = htmlContent
+            };
+
+            return bodyBuilder;
+        }
+
+        private UriBuilder BuildPasswordResetLink(User user, string resetToken, string baseUrl)
+        {
+            var uriBuilder = new UriBuilder($"{baseUrl}api/Authentication/ResetPassword/");
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            string encodedUserId = HttpUtility.UrlEncode(user.Id);
+            string encodedToken = HttpUtility.UrlEncode(resetToken);
+
+            query["id"] = encodedUserId;
+            query["resetToken"] = encodedToken;
+
+            uriBuilder.Query = query.ToString();
+            return uriBuilder;
         }
 
         private UriBuilder BuildEmailVerificationLink(User user, string confirmationToken, string baseUrl)
@@ -36,9 +68,6 @@ namespace TripSplit.Application
             string encodedToken = HttpUtility.UrlEncode(confirmationToken);
             query["id"] = encodedUserId;
             query["confirmationToken"] = encodedToken;
-
-            Console.WriteLine($"User id after encoding: {encodedUserId}" + $"\nConfirmation token after encoding: {encodedToken}");
-
 
             uriBuilder.Query = query.ToString();
             return uriBuilder;
