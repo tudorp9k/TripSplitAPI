@@ -44,6 +44,7 @@ namespace TripSplitAPI
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<ITripRepository, TripRepository>();
             builder.Services.AddScoped<TripService>();

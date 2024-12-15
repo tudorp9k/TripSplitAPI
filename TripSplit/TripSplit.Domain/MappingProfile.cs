@@ -30,5 +30,17 @@ namespace TripSplit.Domain
                 LastName = user.LastName,
             };
         }
+
+        public static User UserDtoToUser(UserDto userDto)
+        {
+            return new User
+            {
+                Id = userDto.Id,
+                Email = userDto.Email,
+                UserName = userDto.Email,
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName,
+            };
+        }
     }
 }
