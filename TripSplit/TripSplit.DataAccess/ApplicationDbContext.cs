@@ -12,6 +12,7 @@ namespace TripSplit.DataAccess
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
         {
         }
+        public DbSet<Trip> Trips { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

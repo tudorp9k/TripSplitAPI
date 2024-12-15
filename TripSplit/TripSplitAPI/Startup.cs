@@ -34,6 +34,9 @@ namespace TripSplitAPI
             builder.Services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<ITripRepository, TripRepository>();
+            builder.Services.AddScoped<TripService>();
+
         }
 
         public static void ConfigureApp(WebApplication app)
