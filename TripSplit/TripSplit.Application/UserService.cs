@@ -17,6 +17,10 @@ namespace TripSplit.Application
         public async Task<UserDto> GetUserById(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
             var userDto = MappingProfile.UserToUserDto(user);
             return userDto;
         }
