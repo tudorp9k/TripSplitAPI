@@ -69,5 +69,49 @@ namespace TripSplit.Controller
 
             return BadRequest();
         }
+
+        [HttpPost("request-password-reset")]
+        public async Task<IActionResult> RequestPasswordReset(string email)
+        {
+            var passwordResetRequestDto = new PasswordResetRequest
+            {
+                Email = email,
+                HttpRequest = Request
+            };
+
+            if (ModelState.IsValid)
+            {
+                await authenticationService.RequestPasswordReset(passwordResetRequestDto);
+
+                return Ok();
+
+                // var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
+
+                // return Redirect($"{frontendAppUrl.Value}/password-reset-page");
+            }
+
+            return BadRequest();
+        }
+
+        [Route("ResetPassword")]
+        [HttpGet]
+        public async Task<IActionResult> PasswordReset([FromQuery] string userId, [FromQuery] string token)
+        {
+            return Ok();
+            // var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
+            // return Redirect($"{frontendAppUrl.Value}/password-reset-page");
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> PasswordReset(PasswordResetDto passwordResetDto)
+        {
+            if (ModelState.IsValid)
+            {
+                await authenticationService.PasswordReset(passwordResetDto);
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
 }

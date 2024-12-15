@@ -15,6 +15,15 @@ namespace TripSplit.Application
             this.emailTemplateBuilder = emailTemplateBuilder ?? throw new ArgumentNullException(nameof(emailTemplateBuilder));
         }
 
+        public async Task SendPasswordResetEmail(User user, string resetToken, string baseUrl)
+        {
+            BodyBuilder bodyBuilder = emailTemplateBuilder.PasswordResetMailTemplate(user, resetToken, baseUrl);
+
+            var email = CreateEmail(user.Email, "Password Reset Email", bodyBuilder);
+
+            await SendEmail(email);
+        }
+
         public async Task SendConfirmationEmail(User user, string confirmationToken, string baseUrl)
         {
             BodyBuilder bodyBuilder = emailTemplateBuilder.ConfirmationMailTemplate(user, confirmationToken, baseUrl);

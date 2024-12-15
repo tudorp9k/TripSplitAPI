@@ -67,8 +67,6 @@ namespace TripSplit.Application
             var decodedUserId = HttpUtility.UrlDecode(request.UserId);
             var decodedConfirmationToken = HttpUtility.UrlDecode(request.ConfirmationToken);
 
-            Console.WriteLine($"User id after decoding: {decodedUserId}" + $"\nConfirmation token after decoding: {decodedConfirmationToken}");
-
             var user = await userManager.FindByIdAsync(decodedUserId);
 
             if (user == null)
@@ -84,6 +82,41 @@ namespace TripSplit.Application
             }
 
             return decodedUserId;
+        }
+
+        public async Task RequestPasswordReset(PasswordResetRequest passwordResetRequest)
+        {
+            var user = await userManager.FindByEmailAsync(passwordResetRequest.Email);
+
+            if (user == null)
+            {
+                throw new InvalidUserCredentialsException("User not found");
+            }
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            var baseUrl = passwordResetRequest.HttpRequest.BaseUrl();
+            await emailService.SendPasswordResetEmail(user, token, baseUrl);
+        }
+
+        public async Task PasswordReset(PasswordResetDto passwordResetDto)
+        {
+            var decodedUserId = HttpUtility.UrlDecode(passwordResetDto.UserId);
+            var decodedToken = HttpUtility.UrlDecode(passwordResetDto.Token);
+
+            var user = await userManager.FindByIdAsync(decodedUserId);
+
+            if (user == null)
+            {
+                throw new InvalidUserCredentialsException("User not found");
+            }
+
+            var result = await userManager.ResetPasswordAsync(user, decodedToken, passwordResetDto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidUserCredentialsException("Password reset failed");
+            }
         }
     }
 }
