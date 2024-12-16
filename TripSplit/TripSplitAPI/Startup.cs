@@ -48,6 +48,7 @@ namespace TripSplitAPI
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<ITripRepository, TripRepository>();
             builder.Services.AddScoped<TripService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
 
         }
 

@@ -12,14 +12,17 @@ namespace TripSplit.Application
     {
         private readonly UserManager<User> userManager;
         private readonly IEmailService emailService;
+        private readonly ITokenService tokenService;
 
-        public AuthenticationService(UserManager<User> userManager, IEmailService emailService)
+        public AuthenticationService(UserManager<User> userManager, IEmailService emailService, ITokenService tokenService)
         {
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+            this.tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
 
-        public async Task<UserDto> Login(LoginDto loginDto)
+
+        public async Task<LoginResult> Login(LoginDto loginDto)
         {
             var user = await userManager.FindByEmailAsync(loginDto.Email);
 
@@ -35,8 +38,14 @@ namespace TripSplit.Application
                 throw new InvalidUserCredentialsException("Invalid password");
             }
 
+            var token = await tokenService.CreateTokenAsync(user);
             var userDto = MappingProfile.UserToUserDto(user);
-            return userDto;
+            var loginResult = new LoginResult
+            {
+                Token = token,
+                User = userDto
+            };
+            return loginResult;
         }
 
         public async Task Register(RegisterRequest registerRequest)
