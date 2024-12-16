@@ -37,7 +37,7 @@ namespace TripSplit.Application
         {
             return new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.FirstName)
+                new Claim(ClaimTypes.Email, user.Email),
             };
         }
 
