@@ -14,10 +14,11 @@ namespace TripSplit.Application
             _context = context;
         }
 
-        public async Task<IEnumerable<Trip>> GetTripsByUserId(int userId)
+        public async Task<IEnumerable<Trip>> GetTripsByUserId(string userId)
         {
-            return await _context.Trips
-                .Where(t => t.UserId == userId)
+            return await _context.TripUsers
+                .Where(tu => tu.UserId == userId)
+                .Select(tu => tu.Trip)
                 .ToListAsync();
         }
 

@@ -8,9 +8,8 @@ namespace TripSplit.Domain.Interfaces
 {
     public interface ITripRepository
     {
-        Task<IEnumerable<Trip>> GetTripsByUserId(int userId);
+        Task<IEnumerable<Trip>> GetTripsByUserId(string userId);
         Task AddTrip(Trip trip);
-
     }
 
 }

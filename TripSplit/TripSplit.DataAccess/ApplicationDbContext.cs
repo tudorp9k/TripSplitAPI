@@ -13,10 +13,59 @@ namespace TripSplit.DataAccess
         {
         }
         public DbSet<Trip> Trips { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
+        public DbSet<ExpenseSplit> ExpenseSplits { get; set; }
+        public DbSet<TripUser> TripUsers { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            modelBuilder.Entity<TripUser>()
+                .HasKey(tu => new { tu.TripId, tu.UserId });
+
+            modelBuilder.Entity<TripUser>()
+                .HasOne(tu => tu.Trip)
+                .WithMany(t => t.Users)
+                .HasForeignKey(tu => tu.TripId);
+
+            modelBuilder.Entity<TripUser>()
+                .HasOne(tu => tu.User)
+                .WithMany(u => u.Trips)
+                .HasForeignKey(tu => tu.UserId);
+
+            modelBuilder.Entity<ExpenseSplit>()
+                .HasKey(es => new { es.ExpenseId, es.UserId });
+
+            modelBuilder.Entity<ExpenseSplit>()
+                .HasOne(es => es.Expense)
+                .WithMany(e => e.Splits)
+                .HasForeignKey(es => es.ExpenseId);
+
+            modelBuilder.Entity<ExpenseSplit>()
+                .HasOne(es => es.User)
+                .WithMany(u => u.ExpenseSplits)
+                .HasForeignKey(es => es.UserId);
+
+            modelBuilder.Entity<Expense>()
+                .HasOne(e => e.Trip)
+                .WithMany(t => t.Expenses)
+                .HasForeignKey(e => e.TripId);
+
+            modelBuilder.Entity<Invitation>()
+                .HasKey(tu => new { tu.TripId, tu.UserId });
+
+            modelBuilder.Entity<Invitation>()
+                .HasOne(i => i.Trip)
+                .WithMany(t => t.Invitations)
+                .HasForeignKey(i => i.TripId);
+
+            modelBuilder.Entity<Invitation>()
+                .HasOne(i => i.User)
+                .WithMany(u => u.Invitations)
+                .HasForeignKey(i => i.UserId);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

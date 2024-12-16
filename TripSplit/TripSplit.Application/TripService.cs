@@ -17,7 +17,7 @@ namespace TripSplit.Application
             _tripRepository = tripRepository;
         }
 
-        public async Task<IEnumerable<Trip>> GetUserTrips(int userId)
+        public async Task<IEnumerable<Trip>> GetUserTrips(string userId)
         {
             return await _tripRepository.GetTripsByUserId(userId);
         }

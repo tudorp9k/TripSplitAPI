@@ -155,6 +155,80 @@ namespace TripSplit.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TripSplit.Domain.Expense", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TripId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TripId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.ExpenseSplit", b =>
+                {
+                    b.Property<int>("ExpenseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ExpenseId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ExpenseSplits");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.Invitation", b =>
+                {
+                    b.Property<int>("TripId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDenied")
+                        .HasColumnType("bit");
+
+                    b.HasKey("TripId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Invitations");
+                });
+
             modelBuilder.Entity("TripSplit.Domain.Trip", b =>
                 {
                     b.Property<int>("Id")
@@ -162,6 +236,12 @@ namespace TripSplit.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Destination")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -172,17 +252,32 @@ namespace TripSplit.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("TripOwnerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId1")
+                    b.Property<string>("TripOwnerId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("TripOwnerId1");
 
                     b.ToTable("Trips");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.TripUser", b =>
+                {
+                    b.Property<int>("TripId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("TripId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TripUsers");
                 });
 
             modelBuilder.Entity("TripSplit.Domain.User", b =>
@@ -307,13 +402,112 @@ namespace TripSplit.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TripSplit.Domain.Trip", b =>
+            modelBuilder.Entity("TripSplit.Domain.Expense", b =>
                 {
+                    b.HasOne("TripSplit.Domain.Trip", "Trip")
+                        .WithMany("Expenses")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TripSplit.Domain.User", null)
+                        .WithMany("Expenses")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Trip");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.ExpenseSplit", b =>
+                {
+                    b.HasOne("TripSplit.Domain.Expense", "Expense")
+                        .WithMany("Splits")
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TripSplit.Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
+                        .WithMany("ExpenseSplits")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Expense");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.Invitation", b =>
+                {
+                    b.HasOne("TripSplit.Domain.Trip", "Trip")
+                        .WithMany("Invitations")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TripSplit.Domain.User", "User")
+                        .WithMany("Invitations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trip");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.Trip", b =>
+                {
+                    b.HasOne("TripSplit.Domain.User", "TripOwner")
+                        .WithMany("OwnedTrips")
+                        .HasForeignKey("TripOwnerId1");
+
+                    b.Navigation("TripOwner");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.TripUser", b =>
+                {
+                    b.HasOne("TripSplit.Domain.Trip", "Trip")
+                        .WithMany("Users")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TripSplit.Domain.User", "User")
+                        .WithMany("Trips")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trip");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.Expense", b =>
+                {
+                    b.Navigation("Splits");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.Trip", b =>
+                {
+                    b.Navigation("Expenses");
+
+                    b.Navigation("Invitations");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TripSplit.Domain.User", b =>
+                {
+                    b.Navigation("ExpenseSplits");
+
+                    b.Navigation("Expenses");
+
+                    b.Navigation("Invitations");
+
+                    b.Navigation("OwnedTrips");
+
+                    b.Navigation("Trips");
                 });
 #pragma warning restore 612, 618
         }

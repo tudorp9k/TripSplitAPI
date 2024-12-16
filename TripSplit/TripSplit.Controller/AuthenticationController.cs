@@ -19,7 +19,7 @@ namespace TripSplit.Controller
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<LoginResult>> Login(LoginDto loginDto)
         {
             if (ModelState.IsValid)
             {
