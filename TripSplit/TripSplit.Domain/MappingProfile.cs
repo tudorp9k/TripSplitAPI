@@ -42,5 +42,30 @@ namespace TripSplit.Domain
                 LastName = userDto.LastName,
             };
         }
+
+        public static Trip CreateTripDtoToTrip(CreateTripDto createTripDto)
+        {
+            return new Trip
+            {
+                Name = createTripDto.Name,
+                Destination = createTripDto.Destination,
+                Description = createTripDto.Description,
+                StartDate = createTripDto.StartDate,
+                EndDate = createTripDto.EndDate,
+            };
+        }
+
+        public static TripDto TripToTripDto(Trip trip)
+        {
+            return new TripDto
+            {
+                Id = trip.Id,
+                Name = trip.Name,
+                Destination = trip.Destination,
+                Description = trip.Description,
+                StartDate = trip.StartDate,
+                EndDate = trip.EndDate,
+            };
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace TripSplit.Domain
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int TripOwnerId { get; set; }
+        public string TripOwnerId { get; set; }
         public User TripOwner { get; set; }
 
         public ICollection<Invitation> Invitations { get; set; } = new List<Invitation>();

@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TripSplit.DataAccess;
 using TripSplit.Domain;
 using TripSplit.Domain.Interfaces;
 
-namespace TripSplit.Application
+namespace TripSplit.DataAccess
 {
     public class TripRepository : ITripRepository
     {
@@ -11,7 +10,7 @@ namespace TripSplit.Application
 
         public TripRepository(ApplicationDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<IEnumerable<Trip>> GetTripsByUserId(string userId)
@@ -20,6 +19,11 @@ namespace TripSplit.Application
                 .Where(tu => tu.UserId == userId)
                 .Select(tu => tu.Trip)
                 .ToListAsync();
+        }
+
+        public async Task<Trip> GetTripById(int tripId)
+        {
+            return await _context.Trips.FindAsync(tripId);
         }
 
         public async Task AddTrip(Trip trip)

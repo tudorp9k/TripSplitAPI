@@ -65,6 +65,14 @@ namespace TripSplit.DataAccess
                 .WithMany(u => u.Invitations)
                 .HasForeignKey(i => i.UserId);
 
+            modelBuilder.Entity<Expense>()
+                .Property(e => e.Amount)
+                .HasPrecision(18, 4);
+
+            modelBuilder.Entity<ExpenseSplit>()
+                .Property(es => es.Amount)
+                .HasPrecision(18, 4);
+
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -12,7 +12,7 @@ using TripSplit.DataAccess;
 namespace TripSplit.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241216200521_Db_Scheme")]
+    [Migration("20241217171444_Db_Scheme")]
     partial class Db_Scheme
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,7 +166,8 @@ namespace TripSplit.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -201,7 +202,8 @@ namespace TripSplit.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
@@ -254,15 +256,12 @@ namespace TripSplit.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TripOwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TripOwnerId1")
+                    b.Property<string>("TripOwnerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TripOwnerId1");
+                    b.HasIndex("TripOwnerId");
 
                     b.ToTable("Trips");
                 });
@@ -461,7 +460,7 @@ namespace TripSplit.DataAccess.Migrations
                 {
                     b.HasOne("TripSplit.Domain.User", "TripOwner")
                         .WithMany("OwnedTrips")
-                        .HasForeignKey("TripOwnerId1");
+                        .HasForeignKey("TripOwnerId");
 
                     b.Navigation("TripOwner");
                 });

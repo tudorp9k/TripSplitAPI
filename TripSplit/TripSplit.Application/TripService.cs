@@ -1,31 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TripSplit.Domain;
+using TripSplit.Domain.Dto;
 using TripSplit.Domain.Interfaces;
-using TripSplit.Domain;
 
 namespace TripSplit.Application
 {
-    public class TripService
+    public class TripService : ITripService
     {
-        private readonly ITripRepository _tripRepository;
+        private readonly ITripRepository tripRepository;
+        private readonly ITripUserRepository tripUserRepository;
 
-        public TripService(ITripRepository tripRepository)
+        public TripService(ITripRepository tripRepository, ITripUserRepository tripUserRepository)
         {
-            _tripRepository = tripRepository;
+            this.tripRepository = tripRepository ?? throw new ArgumentNullException(nameof(tripRepository));
+            this.tripUserRepository = tripUserRepository ?? throw new ArgumentNullException(nameof(tripUserRepository));
         }
 
-        public async Task<IEnumerable<Trip>> GetUserTrips(string userId)
+        public async Task<IEnumerable<TripDto>> GetUserTrips(string userId)
         {
-            return await _tripRepository.GetTripsByUserId(userId);
+            var userTrips = await tripRepository.GetTripsByUserId(userId);
+            var userTripsDto = userTrips.Select(t => MappingProfile.TripToTripDto(t));
+            return userTripsDto;
         }
 
-        public async Task CreateTrip(Trip trip)
+        public async Task CreateTrip(CreateTripDto createTripDto)
         {
-            await _tripRepository.AddTrip(trip);
+            var trip = MappingProfile.CreateTripDtoToTrip(createTripDto);
+            await tripRepository.AddTrip(trip);
         }
 
+        public async Task AddUserToTrip(string userId, int tripId)
+        {
+            var trip = await tripRepository.GetTripById(tripId);
+            if (trip == null)
+            {
+                throw new Exception("Trip not found");
+            }
+
+            var userTrip = new TripUser
+            {
+                TripId = tripId,
+                UserId = userId
+            };
+
+            await tripUserRepository.AddTripUser(userTrip);
+        }
     }
 }

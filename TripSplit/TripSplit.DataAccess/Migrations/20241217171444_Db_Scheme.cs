@@ -20,15 +20,14 @@ namespace TripSplit.DataAccess.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TripOwnerId = table.Column<int>(type: "int", nullable: false),
-                    TripOwnerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TripOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trips", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Trips_AspNetUsers_TripOwnerId1",
-                        column: x => x.TripOwnerId1,
+                        name: "FK_Trips_AspNetUsers_TripOwnerId",
+                        column: x => x.TripOwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -40,7 +39,7 @@ namespace TripSplit.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,4)", precision: 18, scale: 4, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TripId = table.Column<int>(type: "int", nullable: false),
@@ -117,7 +116,7 @@ namespace TripSplit.DataAccess.Migrations
                 {
                     ExpenseId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,4)", precision: 18, scale: 4, nullable: false),
                     IsPaid = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -158,9 +157,9 @@ namespace TripSplit.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trips_TripOwnerId1",
+                name: "IX_Trips_TripOwnerId",
                 table: "Trips",
-                column: "TripOwnerId1");
+                column: "TripOwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TripUsers_UserId",
