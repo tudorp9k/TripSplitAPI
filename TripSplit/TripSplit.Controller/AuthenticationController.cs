@@ -84,10 +84,6 @@ namespace TripSplit.Controller
                 await authenticationService.RequestPasswordReset(passwordResetRequestDto);
 
                 return Ok();
-
-                // var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
-
-                // return Redirect($"{frontendAppUrl.Value}/password-reset-page");
             }
 
             return BadRequest();
@@ -95,11 +91,11 @@ namespace TripSplit.Controller
 
         [Route("ResetPassword")]
         [HttpGet]
-        public async Task<IActionResult> PasswordReset([FromQuery] string userId, [FromQuery] string token)
+        public async Task<IActionResult> PasswordReset([FromQuery] string id, [FromQuery] string resetToken)
         {
-            return Ok();
-            // var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
-            // return Redirect($"{frontendAppUrl.Value}/password-reset-page");
+            var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
+
+            return Redirect($"{frontendAppUrl.Value}/ResetPassword");
         }
 
         [HttpPost("reset-password")]
