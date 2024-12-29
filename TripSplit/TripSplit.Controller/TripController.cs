@@ -31,6 +31,13 @@ namespace TripSplit.Controller
             return Ok(new { Message = "User added to trip successfully!" });
         }
 
+        [HttpDelete("remove-trip")]
+        public async Task<IActionResult> RemoveTrip(int tripId)
+        {
+            await tripService.RemoveTrip(tripId);
+            return Ok(new { Message = "Trip removed successfully!" });
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateTrip([FromBody] CreateTripDto trip)
         {

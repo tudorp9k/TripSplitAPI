@@ -11,6 +11,7 @@ namespace TripSplit.Domain.Interfaces
         Task<IEnumerable<Trip>> GetTripsByUserId(string userId);
         Task AddTrip(Trip trip);
         Task<Trip> GetTripById(int tripId);
+        Task RemoveTrip(Trip trip);
     }
 
 }

@@ -61,5 +61,16 @@ namespace TripSplit.Application
 
             await tripUserRepository.RemoveTripUser(userTrip);
         }
+
+        public async Task RemoveTrip(int tripId)
+        {
+            var trip = await tripRepository.GetTripById(tripId);
+            if (trip == null)
+            {
+                throw new Exception("Trip not found");
+            }
+
+            await tripRepository.RemoveTrip(trip);
+        }
     }
 }
