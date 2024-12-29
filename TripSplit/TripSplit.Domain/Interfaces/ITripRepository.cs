@@ -12,6 +12,7 @@ namespace TripSplit.Domain.Interfaces
         Task AddTrip(Trip trip);
         Task<Trip> GetTripById(int tripId);
         Task RemoveTrip(Trip trip);
+        Task UpdateTrip(Trip trip);
     }
 
 }

@@ -44,5 +44,12 @@ namespace TripSplit.Controller
             await tripService.CreateTrip(trip);
             return Ok(new { Message = "Trip created successfully!" });
         }
+
+        [HttpPut("set-trip-owner")]
+        public async Task<IActionResult> SetTripOwner(int tripId, string userId)
+        {
+            await tripService.SetTripOwner(userId, tripId);
+            return Ok(new { Message = "Trip owner set successfully!" });
+        }
     }
 }

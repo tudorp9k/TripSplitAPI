@@ -37,5 +37,11 @@ namespace TripSplit.DataAccess
             _context.Trips.Remove(trip);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateTrip(Trip trip)
+        {
+            _context.Trips.Update(trip);
+            await _context.SaveChangesAsync();
+        }
     }
 }
