@@ -25,8 +25,10 @@ namespace TripSplit.Controller
         }
 
         [HttpPost("add-user-to-trip")]
-        public async Task<IActionResult> AddUserToTrip(string userId, int tripId)
+        public async Task<IActionResult> AddUserToTrip(AddUserToTripRequest request)
         {
+            var userId = request.UserId;
+            var tripId = request.TripId;
             await tripService.AddUserToTrip(userId, tripId);
             return Ok(new { Message = "User added to trip successfully!" });
         }
