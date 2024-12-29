@@ -22,10 +22,11 @@ namespace TripSplit.Application
             return userTripsDto;
         }
 
-        public async Task CreateTrip(CreateTripDto createTripDto)
+        public async Task<int> CreateTrip(CreateTripDto createTripDto)
         {
             var trip = MappingProfile.CreateTripDtoToTrip(createTripDto);
-            await tripRepository.AddTrip(trip);
+            var tripId = await tripRepository.AddTrip(trip);
+            return tripId;
         }
 
         public async Task AddUserToTrip(string userId, int tripId)

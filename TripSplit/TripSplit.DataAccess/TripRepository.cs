@@ -26,10 +26,11 @@ namespace TripSplit.DataAccess
             return await _context.Trips.FindAsync(tripId);
         }
 
-        public async Task AddTrip(Trip trip)
+        public async Task<int> AddTrip(Trip trip)
         {
-            await _context.Trips.AddAsync(trip);
+            var result = await _context.Trips.AddAsync(trip);
             await _context.SaveChangesAsync();
+            return result.Entity.Id;
         }
 
         public async Task RemoveTrip(Trip trip)

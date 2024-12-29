@@ -41,8 +41,8 @@ namespace TripSplit.Controller
         [HttpPost("create")]
         public async Task<IActionResult> CreateTrip([FromBody] CreateTripDto trip)
         {
-            await tripService.CreateTrip(trip);
-            return Ok(new { Message = "Trip created successfully!" });
+            var tripId = await tripService.CreateTrip(trip);
+            return Ok(new { TripId = tripId });
         }
 
         [HttpPut("set-trip-owner")]
