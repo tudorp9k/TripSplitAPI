@@ -51,7 +51,7 @@ namespace TripSplit.Application
 
         private UriBuilder BuildPasswordResetLink(User user, string resetToken, string baseUrl)
         {
-            var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
+            var frontendAppUrl = configuration.GetSection("FrontendApp:Url").Value;
             var uriBuilder = new UriBuilder($"{frontendAppUrl}/ResetPassword");
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
@@ -67,14 +67,9 @@ namespace TripSplit.Application
 
         private UriBuilder BuildEmailVerificationLink(User user, string confirmationToken, string baseUrl)
         {
-            var uriBuilder = new UriBuilder($"{baseUrl}api/Authentication/ConfirmEmail/");
+            var frontendAppUrl = configuration.GetSection("FrontendApp:Url").Value;
+            var uriBuilder = new UriBuilder($"{frontendAppUrl}/AccountValidated");
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-
-            string encodedUserId = HttpUtility.UrlEncode(user.Id);
-            string encodedToken = HttpUtility.UrlEncode(confirmationToken);
-            query["id"] = encodedUserId;
-            query["confirmationToken"] = encodedToken;
-
             uriBuilder.Query = query.ToString();
             return uriBuilder;
         }
