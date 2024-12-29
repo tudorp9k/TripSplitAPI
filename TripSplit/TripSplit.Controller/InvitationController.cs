@@ -37,5 +37,19 @@ namespace TripSplit.Controller
             await _invitationService.RejectInvitation(invitationDto.TripId, invitationDto.UserId);
             return Ok("Invitation rejected successfully");
         }
+
+        [HttpPost("invite-by-email")]
+        public async Task<IActionResult> InviteUserByEmail([FromBody] InviteUserDto inviteUserDto)
+        {
+            await _invitationService.InviteUserByEmail(inviteUserDto.TripId, inviteUserDto.Email);
+            return Ok("Invitation sent successfully to the user by email.");
+        }
+
+        [HttpGet("get-user-invitations")]
+        public async Task<IActionResult> GetUserInvitations(string userId)
+        {
+            var invitations = await _invitationService.GetInvitationsForUser(userId);
+            return Ok(invitations);
+        }
     }
 }

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TripSplit.DataAccess;
 using TripSplit.Domain;
@@ -47,8 +46,7 @@ namespace TripSplit.Application
 
         public async Task AcceptInvitation(int tripId, string userId)
         {
-            var invitation = await _context.Invitations
-                .FindAsync(tripId, userId);
+            var invitation = await _context.Invitations.FindAsync(tripId, userId);
             if (invitation == null)
                 throw new Exception("Invitation not found");
 
@@ -66,12 +64,52 @@ namespace TripSplit.Application
 
         public async Task RejectInvitation(int tripId, string userId)
         {
-            var invitation = await _context.Invitations
-                .FindAsync(tripId, userId);
+            var invitation = await _context.Invitations.FindAsync(tripId, userId);
             if (invitation == null)
                 throw new Exception("Invitation not found");
 
             _context.Invitations.Remove(invitation);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<List<InvitationDto>> GetInvitationsForUser(string userId)
+        {
+            var invitations = await _context.Invitations
+                .Where(i => i.UserId == userId && !i.IsDenied)
+                .Select(i => new InvitationDto
+                {
+                    TripId = i.TripId,
+                    UserId = i.UserId,
+                    IsDenied = i.IsDenied
+                })
+                .ToListAsync();
+
+            return invitations;
+        }
+
+        public async Task InviteUserByEmail(int tripId, string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                throw new Exception("User with the specified email does not exist.");
+
+            var existingInvitation = await _context.Invitations
+                .FindAsync(tripId, user.Id);
+            if (existingInvitation != null)
+                throw new Exception("An invitation for this user already exists.");
+
+            var isUserInTrip = await _context.TripUsers
+                .AnyAsync(tu => tu.TripId == tripId && tu.UserId == user.Id);
+            if (isUserInTrip)
+                throw new Exception("User is already part of the trip.");
+
+            var invitation = new Invitation
+            {
+                TripId = tripId,
+                UserId = user.Id,
+                IsDenied = false
+            };
+
+            _context.Invitations.Add(invitation);
             await _context.SaveChangesAsync();
         }
     }
