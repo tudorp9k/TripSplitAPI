@@ -3,6 +3,7 @@ using TripSplit.Domain;
 using System;
 using TripSplit.Domain.Interfaces;
 using TripSplit.Domain.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace TripSplit.Application
 {
@@ -38,6 +39,27 @@ namespace TripSplit.Application
             if (!result.Succeeded)
             {
                 throw new Exception("User update failed");
+            }
+        }
+
+        public async Task<IEnumerable<UserDto>> GetAllUsers()
+        {
+            var users = await userManager.Users.ToListAsync();
+            var userDtos = users.Select(user => MappingProfile.UserToUserDto(user));
+            return userDtos;
+        }
+
+        public async Task DeleteUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            var result = await userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new Exception("User deletion failed");
             }
         }
     }

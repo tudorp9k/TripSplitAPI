@@ -89,14 +89,14 @@ namespace TripSplit.Controller
             return BadRequest();
         }
 
-        [Route("ResetPassword")]
-        [HttpGet]
-        public async Task<IActionResult> PasswordReset([FromQuery] string id, [FromQuery] string resetToken)
-        {
-            var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
-
-            return Redirect($"{frontendAppUrl.Value}/ResetPassword");
-        }
+        //[Route("ResetPassword")]
+        //[HttpGet]
+        //public async Task<IActionResult> PasswordReset([FromQuery] string id, [FromQuery] string resetToken)
+        //{
+        //    var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
+        //    var url = $"{frontendAppUrl.Value}/ResetPassword?id={id}&resetToken={resetToken}";
+        //    return Redirect(url);
+        //}
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> PasswordReset(PasswordResetDto passwordResetDto)

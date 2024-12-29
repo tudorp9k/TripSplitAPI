@@ -18,5 +18,17 @@ namespace TripSplit.DataAccess
             await _context.TripUsers.AddAsync(tripUser);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<TripUser> GetTripUser(string userId, int tripId)
+        {
+            var tripUser = await _context.TripUsers.FindAsync(userId, tripId);
+            return tripUser;
+        }
+
+        public async Task RemoveTripUser(TripUser tripUser)
+        {
+            _context.TripUsers.Remove(tripUser);
+            await _context.SaveChangesAsync();
+        }
     }
 }

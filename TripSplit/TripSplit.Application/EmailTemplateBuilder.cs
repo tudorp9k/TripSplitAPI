@@ -8,6 +8,11 @@ namespace TripSplit.Application
 {
     public class EmailTemplateBuilder : IEmailTemplateBuilder
     {
+        private readonly IConfiguration configuration;
+        public EmailTemplateBuilder(IConfiguration configuration)
+        {
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
         public BodyBuilder ConfirmationMailTemplate(User user, string confirmationToken, string baseUrl)
         {
             var templateFilePath = Path.Combine("..", "TripSplit.Application", "Templates", "EmailTemplate.html");
@@ -46,7 +51,8 @@ namespace TripSplit.Application
 
         private UriBuilder BuildPasswordResetLink(User user, string resetToken, string baseUrl)
         {
-            var uriBuilder = new UriBuilder($"{baseUrl}api/Authentication/ResetPassword/");
+            var frontendAppUrl = configuration.GetSection("FrontendApp:Url");
+            var uriBuilder = new UriBuilder($"{frontendAppUrl}/ResetPassword");
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
             string encodedUserId = HttpUtility.UrlEncode(user.Id);

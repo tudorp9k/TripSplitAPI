@@ -28,5 +28,19 @@ namespace TripSplit.Controller
             await userService.UpdateUser(userDto);
             return Ok();
         }
+
+        [HttpGet("get-all-users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var result = await userService.GetAllUsers();
+            return Ok(result);
+        }
+
+        [HttpDelete("delete-user")]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            await userService.DeleteUser(userId);
+            return Ok();
+        }
     }
 }
