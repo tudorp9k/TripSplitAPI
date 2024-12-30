@@ -74,12 +74,14 @@ namespace TripSplit.Application
         public async Task<List<InvitationDto>> GetInvitationsForUser(string userId)
         {
             var invitations = await _context.Invitations
-                .Where(i => i.UserId == userId && !i.IsDenied)
-                .Select(i => new InvitationDto
+                .Where(inv => inv.UserId == userId && !inv.IsDenied)
+                .Select(inv => new InvitationDto
                 {
-                    TripId = i.TripId,
-                    UserId = i.UserId,
-                    IsDenied = i.IsDenied
+                    TripId = inv.TripId,
+                    UserId = inv.UserId,
+                    TripName = inv.Trip.Name, 
+                    TripDestination = inv.Trip.Destination, 
+                    IsDenied = inv.IsDenied
                 })
                 .ToListAsync();
 

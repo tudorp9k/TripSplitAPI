@@ -5,6 +5,8 @@
         public int TripId { get; set; }
         public string UserId { get; set; }
         public bool IsDenied { get; set; }
+        public string TripName { get; set; } 
+        public string TripDestination { get; set; } 
     }
 
     public class InviteUserDto
