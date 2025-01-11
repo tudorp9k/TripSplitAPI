@@ -74,6 +74,35 @@ namespace TripSplit.Application
             await tripRepository.RemoveTrip(trip);
         }
 
+        public async Task<TripDetailDto> GetTripDetails(int tripId)
+        {
+            // 1. Load the Trip from the repository with the Users included
+            var trip = await tripRepository.GetTripByIdWithUsers(tripId);
+            if (trip == null)
+                throw new Exception("Trip not found");
+
+            // 2. Create a TripDetailDto from the loaded Trip
+            var tripDetailDto = new TripDetailDto
+            {
+                Id = trip.Id,
+                Name = trip.Name,
+                Destination = trip.Destination,
+                Description = trip.Description,
+                StartDate = trip.StartDate,
+                EndDate = trip.EndDate,
+                Participants = trip.Users
+                    .Select(tu => new TripParticipantDto
+                    {
+                        UserId = tu.UserId,
+                        FirstName = tu.User.FirstName,
+                        LastName = tu.User.LastName
+                    })
+                    .ToList()
+            };
+
+            return tripDetailDto;
+        }
+
         public async Task SetTripOwner(string userId, int tripId)
         {
             var trip = await tripRepository.GetTripById(tripId);

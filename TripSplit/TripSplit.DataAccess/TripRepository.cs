@@ -44,5 +44,13 @@ namespace TripSplit.DataAccess
             _context.Trips.Update(trip);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Trip> GetTripByIdWithUsers(int tripId)
+        {
+            return await _context.Trips
+                .Include(t => t.Users)           
+                    .ThenInclude(tu => tu.User)  
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+        }
     }
 }

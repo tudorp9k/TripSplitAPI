@@ -9,5 +9,7 @@ namespace TripSplit.Domain.Interfaces
         Task<IEnumerable<TripDto>> GetUserTrips(string userId);
         Task RemoveTrip(int tripId);
         Task SetTripOwner(string userId, int tripId);
+        Task<TripDetailDto> GetTripDetails(int tripId);
+
     }
 }
