@@ -54,12 +54,6 @@ namespace TripSplit.Controller
             return Ok(new { Message = "Trip owner set successfully!" });
         }
 
-        [HttpGet("get-trip-details")]
-        public async Task<IActionResult> GetTripDetails([FromQuery] int tripId)
-        {
-            // Example usage: GET /api/Trip/get-trip-details?tripId=123
-            var detail = await tripService.GetTripDetails(tripId);
-            return Ok(detail);
-        }
+     
     }
 }
