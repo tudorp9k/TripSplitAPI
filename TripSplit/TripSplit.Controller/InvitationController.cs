@@ -20,29 +20,59 @@ namespace TripSplit.Controller
         [HttpPost("send")]
         public async Task<IActionResult> SendInvitation([FromBody] InvitationDto invitationDto)
         {
-            await _invitationService.SendInvitation(invitationDto.TripId, invitationDto.UserId);
-            return Ok("Invitation sent successfully");
+            try
+            {
+                await _invitationService.SendInvitation(invitationDto.TripId, invitationDto.UserId);
+                return Ok("Invitation sent successfully");
+            }
+            catch (Exception ex)
+            {
+                // If there's an overlap or any other error, return 400 with the message
+                return BadRequest(new { Message = ex.Message });
+            }
         }
 
         [HttpPost("accept")]
         public async Task<IActionResult> AcceptInvitation([FromBody] InvitationDto invitationDto)
         {
-            await _invitationService.AcceptInvitation(invitationDto.TripId, invitationDto.UserId);
-            return Ok("Invitation accepted successfully");
+            try
+            {
+                await _invitationService.AcceptInvitation(invitationDto.TripId, invitationDto.UserId);
+                return Ok("Invitation accepted successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
         }
 
         [HttpPost("reject")]
         public async Task<IActionResult> RejectInvitation([FromBody] InvitationDto invitationDto)
         {
-            await _invitationService.RejectInvitation(invitationDto.TripId, invitationDto.UserId);
-            return Ok("Invitation rejected successfully");
+            try
+            {
+                await _invitationService.RejectInvitation(invitationDto.TripId, invitationDto.UserId);
+                return Ok("Invitation rejected successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
         }
 
         [HttpPost("invite-by-email")]
         public async Task<IActionResult> InviteUserByEmail([FromBody] InviteUserDto inviteUserDto)
         {
-            await _invitationService.InviteUserByEmail(inviteUserDto.TripId, inviteUserDto.Email);
-            return Ok("Invitation sent successfully to the user by email.");
+            try
+            {
+                await _invitationService.InviteUserByEmail(inviteUserDto.TripId, inviteUserDto.Email);
+                return Ok("Invitation sent successfully to the user by email.");
+            }
+            catch (Exception ex)
+            {
+                // Overlap or user not found, etc.
+                return BadRequest(new { Message = ex.Message });
+            }
         }
 
         [HttpGet("get-user-invitations")]

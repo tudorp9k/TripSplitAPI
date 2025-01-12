@@ -22,12 +22,41 @@ namespace TripSplit.Application
             return userTripsDto;
         }
 
-        public async Task<int> CreateTrip(CreateTripDto createTripDto)
+        // TripService.cs
+        public async Task<int> CreateTrip(CreateTripDto createTripDto, string userId)
         {
-            var trip = MappingProfile.CreateTripDtoToTrip(createTripDto);
-            var tripId = await tripRepository.AddTrip(trip);
+            // 1) Convert DTO -> Domain
+            var newTrip = MappingProfile.CreateTripDtoToTrip(createTripDto);
+
+            // 2) Check if this user is already engaged in an overlapping trip
+            //    We can fetch all trips for that user, then see if any overlap
+            var userTrips = await tripRepository.GetTripsByUserId(userId);
+
+            bool isOverlapping = userTrips.Any(t =>
+                // Overlap check: if (newTrip.StartDate <= t.EndDate) && (newTrip.EndDate >= t.StartDate)
+                // that indicates at least one day overlaps
+                newTrip.StartDate <= t.EndDate && newTrip.EndDate >= t.StartDate
+            );
+
+            if (isOverlapping)
+            {
+                throw new Exception("You already have another trip that overlaps this time period.");
+            }
+
+            // 3) Create the new trip in the DB
+            var tripId = await tripRepository.AddTrip(newTrip);
+
+            // 4) Also attach the user as the trip owner or participant
+            //    Example: set the TripOwner, or add them via TripUser:
+            await tripUserRepository.AddTripUser(new TripUser
+            {
+                TripId = tripId,
+                UserId = userId
+            });
+
             return tripId;
         }
+
 
         public async Task AddUserToTrip(string userId, int tripId)
         {
