@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripSplitAPI", "TripSplitAPI\TripSplitAPI.csproj", "{689C05C1-A502-4CE1-8F86-DA04BBC11F5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplitAPI", "TripSplitAPI\TripSplitAPI.csproj", "{689C05C1-A502-4CE1-8F86-DA04BBC11F5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripSplit.Domain", "TripSplit.Domain\TripSplit.Domain.csproj", "{743DE370-8231-4D12-B3F3-2074B4F437A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplit.Domain", "TripSplit.Domain\TripSplit.Domain.csproj", "{743DE370-8231-4D12-B3F3-2074B4F437A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripSplit.DataAccess", "TripSplit.DataAccess\TripSplit.DataAccess.csproj", "{8C824689-8E02-49C3-BC39-38DE99EE9EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplit.DataAccess", "TripSplit.DataAccess\TripSplit.DataAccess.csproj", "{8C824689-8E02-49C3-BC39-38DE99EE9EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripSplit.Controller", "TripSplit.Controller\TripSplit.Controller.csproj", "{7E0B4A54-5E7A-48B7-9F24-061BC2ACDF52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplit.Controller", "TripSplit.Controller\TripSplit.Controller.csproj", "{7E0B4A54-5E7A-48B7-9F24-061BC2ACDF52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripSplit.Application", "TripSplit.Application\TripSplit.Application.csproj", "{B75CDCD3-3E2E-4436-881B-EAF5FD1CE9EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplit.Application", "TripSplit.Application\TripSplit.Application.csproj", "{B75CDCD3-3E2E-4436-881B-EAF5FD1CE9EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripSplit.Test", "TripSplit.Test\TripSplit.Test.csproj", "{2EAA6EE4-ED22-418D-9D1B-C9A4D47B0AD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B75CDCD3-3E2E-4436-881B-EAF5FD1CE9EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B75CDCD3-3E2E-4436-881B-EAF5FD1CE9EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B75CDCD3-3E2E-4436-881B-EAF5FD1CE9EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EAA6EE4-ED22-418D-9D1B-C9A4D47B0AD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EAA6EE4-ED22-418D-9D1B-C9A4D47B0AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EAA6EE4-ED22-418D-9D1B-C9A4D47B0AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EAA6EE4-ED22-418D-9D1B-C9A4D47B0AD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
