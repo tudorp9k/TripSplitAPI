@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplit.Controller", "Tri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplit.Application", "TripSplit.Application\TripSplit.Application.csproj", "{B75CDCD3-3E2E-4436-881B-EAF5FD1CE9EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripSplit.Test", "TripSplit.Test\TripSplit.Test.csproj", "{2EAA6EE4-ED22-418D-9D1B-C9A4D47B0AD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripSplit.Test", "TripSplit.Test\TripSplit.Test.csproj", "{2EAA6EE4-ED22-418D-9D1B-C9A4D47B0AD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

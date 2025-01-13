@@ -51,6 +51,9 @@ namespace TripSplitAPI
             builder.Services.AddScoped<ITripUserRepository, TripUserRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IInvitationService, InvitationService>();
+            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            builder.Services.AddScoped<IExpenseSplitRepository, ExpenseSplitRepository>();
+            builder.Services.AddScoped<IExpenseService, ExpenseService>();
 
 
         }

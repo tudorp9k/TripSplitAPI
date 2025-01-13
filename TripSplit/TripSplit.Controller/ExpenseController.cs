@@ -1,0 +1,31 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using TripSplit.Domain.Dto;
+using TripSplit.Domain.Interfaces;
+
+namespace TripSplit.Controller
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ExpenseController : ControllerBase
+    {
+        private readonly IExpenseService expenseService;
+
+        public ExpenseController(IExpenseService expenseService)
+        {
+            this.expenseService = expenseService ?? throw new ArgumentNullException(nameof(expenseService));
+        }
+
+        [HttpPost("create")]
+        public async Task<int> CreateExpense(CreateExpenseDto createExpenseDto)
+        {
+            return await expenseService.CreateExpense(createExpenseDto);
+        }
+
+        [HttpGet("get-by-id")]
+        public async Task<GetExpensesResponse> GetExpensesByTripId(int tripId)
+        {
+            var expenses = await expenseService.GetExpensesByTripId(tripId);
+            return expenses;
+        }
+    }
+}

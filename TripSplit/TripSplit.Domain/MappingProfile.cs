@@ -67,5 +67,30 @@ namespace TripSplit.Domain
                 EndDate = trip.EndDate,
             };
         }
+
+        public static Expense CreateExpenseDtoToExpense(CreateExpenseDto createExpenseDto)
+        {
+            return new Expense
+            {
+                Name = createExpenseDto.Name,
+                Amount = createExpenseDto.Amount,
+                Description = createExpenseDto.Description,
+                Date = createExpenseDto.Date,
+                TripId = createExpenseDto.TripId
+            };
+        }
+
+        public static ExpenseDto ExpenseToExpenseDto(Expense expense)
+        {
+            return new ExpenseDto
+            {
+                Id = expense.Id,
+                TripId = expense.TripId,
+                Name = expense.Name,
+                Amount = expense.Amount,
+                Description = expense.Description,
+                Date = expense.Date,
+            };
+        }
     }
 }

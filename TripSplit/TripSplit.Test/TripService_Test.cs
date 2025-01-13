@@ -67,7 +67,7 @@ namespace TripSplit.Test
                 .ReturnsAsync(newTripId);
 
             // Act
-            var result = await _tripService.CreateTrip(createTripDto);
+            var result = await _tripService.CreateTrip(createTripDto, "id");
 
             // Assert
             Assert.AreEqual(newTripId, result);
