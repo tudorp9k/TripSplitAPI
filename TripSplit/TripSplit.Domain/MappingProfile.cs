@@ -63,8 +63,8 @@ namespace TripSplit.Domain
                 Name = trip.Name,
                 Destination = trip.Destination,
                 Description = trip.Description,
-                StartDate = trip.StartDate,
-                EndDate = trip.EndDate,
+                StartDate = trip.StartDate.ToShortDateString(),
+                EndDate = trip.StartDate.ToShortDateString(),
             };
         }
 

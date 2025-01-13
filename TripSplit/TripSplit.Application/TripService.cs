@@ -117,8 +117,8 @@ namespace TripSplit.Application
                 Name = trip.Name,
                 Destination = trip.Destination,
                 Description = trip.Description,
-                StartDate = trip.StartDate,
-                EndDate = trip.EndDate,
+                StartDate = trip.StartDate.Date.ToShortDateString(),
+                EndDate = trip.EndDate.Date.ToShortDateString(),
                 Participants = trip.Users
                     .Select(tu => new TripParticipantDto
                     {
