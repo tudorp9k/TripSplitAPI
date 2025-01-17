@@ -15,11 +15,15 @@ namespace TripSplit.Application
             this.expenseSplitRepository = expenseSplitRepository ?? throw new ArgumentNullException(nameof(expenseSplitRepository));
         }
 
-        public async Task<int> CreateExpense(CreateExpenseDto createExpenseDto)
+        public async Task<CreateExpenseResponse> CreateExpense(CreateExpenseDto createExpenseDto)
         {
             var expense = MappingProfile.CreateExpenseDtoToExpense(createExpenseDto);
             var expenseId = await expenseRepository.AddExpense(expense);
-            return expenseId;
+            var response = new CreateExpenseResponse
+            {
+                ExpenseId = expenseId
+            };
+            return response;
         }
 
         public async Task<GetExpensesResponse> GetExpensesByTripId(int tripId)

@@ -62,5 +62,16 @@ namespace TripSplit.Application
                 throw new Exception("User deletion failed");
             }
         }
+
+        public async Task<UserDto> GetUserByEmail(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            var userDto = MappingProfile.UserToUserDto(user);
+            return userDto;
+        }
     }
 }

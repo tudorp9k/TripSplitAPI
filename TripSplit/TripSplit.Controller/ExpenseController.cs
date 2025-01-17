@@ -16,7 +16,7 @@ namespace TripSplit.Controller
         }
 
         [HttpPost("create")]
-        public async Task<int> CreateExpense(CreateExpenseDto createExpenseDto)
+        public async Task<CreateExpenseResponse> CreateExpense(CreateExpenseDto createExpenseDto)
         {
             return await expenseService.CreateExpense(createExpenseDto);
         }
@@ -26,6 +26,13 @@ namespace TripSplit.Controller
         {
             var expenses = await expenseService.GetExpensesByTripId(tripId);
             return expenses;
+        }
+
+        [HttpPost("split")]
+        public async Task SplitExpense(SplitExpensesRequest request)
+        {
+            var isEqualSplit = true;
+            await expenseService.SplitExpense(request.ExpenseId, request.UserSplits, isEqualSplit);
         }
     }
 }

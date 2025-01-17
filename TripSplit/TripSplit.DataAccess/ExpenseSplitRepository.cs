@@ -23,6 +23,7 @@ namespace TripSplit.DataAccess
             foreach (ExpenseSplit expenseSplit in expenseSplits)
             {
                 await _context.ExpenseSplits.AddAsync(expenseSplit);
+                await _context.SaveChangesAsync();
             }
         }
     }

@@ -6,6 +6,7 @@ namespace TripSplit.Domain.Interfaces
     {
         Task DeleteUser(string userId);
         Task<IEnumerable<UserDto>> GetAllUsers();
+        Task<UserDto> GetUserByEmail(string email);
         Task<UserDto> GetUserById(string userId);
         Task UpdateUser(UserDto userdto);
     }

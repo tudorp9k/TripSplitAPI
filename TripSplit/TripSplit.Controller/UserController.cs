@@ -42,5 +42,12 @@ namespace TripSplit.Controller
             await userService.DeleteUser(userId);
             return Ok();
         }
+
+        [HttpGet("get-user-by-email")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            var result = await userService.GetUserByEmail(email);
+            return Ok(result);
+        }
     }
 }
