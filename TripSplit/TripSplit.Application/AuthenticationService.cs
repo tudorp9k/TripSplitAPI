@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Web;
 using TripSplit.Domain;
@@ -11,14 +12,18 @@ namespace TripSplit.Application
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<User> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IEmailService emailService;
         private readonly ITokenService tokenService;
+        private readonly IConfiguration configuration;
 
-        public AuthenticationService(UserManager<User> userManager, IEmailService emailService, ITokenService tokenService)
+        public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IEmailService emailService, ITokenService tokenService, IConfiguration configuration)
         {
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
             this.tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
 
@@ -126,6 +131,45 @@ namespace TripSplit.Application
             {
                 throw new InvalidUserCredentialsException("Password reset failed");
             }
+        }
+
+
+        public async Task CreateAdmin()
+        {
+            var adminConfig = configuration.GetSection("AdminCredentials");
+            var adminEmail = adminConfig["Email"];
+            var adminPassword = adminConfig["Password"];
+
+            var newAdmin = new User
+            {
+                Email = adminEmail,
+                UserName = adminEmail,
+                FirstName = "Admin",
+                LastName = "Admin",
+            };
+
+            var result = await userManager.CreateAsync(newAdmin, adminPassword);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception("Admin creation failed");
+            }
+
+            var admin = await userManager.FindByEmailAsync(adminEmail);
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+            await userManager.AddToRoleAsync(admin, "Admin");
+        }
+
+        public async Task<bool> IsUserAdmin(string userId)
+        {
+            var admin = await userManager.FindByIdAsync(userId);
+            if (admin == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var result = await userManager.IsInRoleAsync(admin, "Admin");
+            return result;
         }
     }
 }

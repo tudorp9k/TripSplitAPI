@@ -30,10 +30,10 @@ namespace TripSplit.Controller
         }
 
         [HttpGet("get-all-users")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<GetAllUsersResponse> GetAllUsers()
         {
             var result = await userService.GetAllUsers();
-            return Ok(result);
+            return result;
         }
 
         [HttpDelete("delete-user")]

@@ -109,5 +109,19 @@ namespace TripSplit.Controller
 
             return BadRequest();
         }
+
+        [HttpPost("create-admin")]
+        public async Task<IActionResult> CreateAdmin()
+        {
+            await authenticationService.CreateAdmin();
+            return Ok();
+        }
+
+        [HttpGet("is-admin")]
+        public async Task<IActionResult> IsUserAdmin(string userId)
+        {
+            var result = await authenticationService.IsUserAdmin(userId);
+            return Ok(new { isAdmin = result });
+        }
     }
 }

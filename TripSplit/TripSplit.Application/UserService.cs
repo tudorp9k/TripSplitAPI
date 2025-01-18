@@ -4,6 +4,7 @@ using System;
 using TripSplit.Domain.Interfaces;
 using TripSplit.Domain.Dto;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace TripSplit.Application
 {
@@ -42,11 +43,15 @@ namespace TripSplit.Application
             }
         }
 
-        public async Task<IEnumerable<UserDto>> GetAllUsers()
+        public async Task<GetAllUsersResponse> GetAllUsers()
         {
             var users = await userManager.Users.ToListAsync();
             var userDtos = users.Select(user => MappingProfile.UserToUserDto(user));
-            return userDtos;
+            var response = new GetAllUsersResponse
+            {
+                Users = userDtos
+            };
+            return response;
         }
 
         public async Task DeleteUser(string userId)
