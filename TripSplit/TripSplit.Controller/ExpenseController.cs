@@ -34,5 +34,11 @@ namespace TripSplit.Controller
             var isEqualSplit = true;
             await expenseService.SplitExpense(request.ExpenseId, request.UserSplits, isEqualSplit);
         }
+
+        [HttpGet("get-splits-by-expense-id")]
+        public async Task<Dictionary<string, decimal>> GetExpensesSplitByExpenseId(int expenseId)
+        {
+            return await expenseService.GetExpensesSplitByExpenseId(expenseId);
+        }
     }
 }

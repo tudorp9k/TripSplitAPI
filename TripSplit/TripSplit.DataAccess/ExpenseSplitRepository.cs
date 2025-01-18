@@ -1,4 +1,5 @@
-﻿using TripSplit.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using TripSplit.Domain;
 using TripSplit.Domain.Interfaces;
 
 namespace TripSplit.DataAccess
@@ -25,6 +26,11 @@ namespace TripSplit.DataAccess
                 await _context.ExpenseSplits.AddAsync(expenseSplit);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<ExpenseSplit>> GetExpenseSplitsByExpenseId(int expenseId)
+        {
+            return await _context.ExpenseSplits.Where(es => es.ExpenseId == expenseId).ToListAsync();
         }
     }
 }

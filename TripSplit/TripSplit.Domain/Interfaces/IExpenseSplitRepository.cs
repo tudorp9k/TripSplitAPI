@@ -6,5 +6,6 @@ namespace TripSplit.Domain.Interfaces
     {
         Task AddExpenseSplit(ExpenseSplit expenseSplit);
         Task AddExpenseSplits(List<ExpenseSplit> expenseSplits);
+        Task<IEnumerable<ExpenseSplit>> GetExpenseSplitsByExpenseId(int expenseId);
     }
 }

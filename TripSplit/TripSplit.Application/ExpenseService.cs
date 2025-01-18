@@ -90,6 +90,15 @@ namespace TripSplit.Application
             await expenseSplitRepository.AddExpenseSplits(splits);
         }
 
-
+        public async Task<Dictionary<string, decimal>> GetExpensesSplitByExpenseId(int expenseId)
+        {
+            var splits = await expenseSplitRepository.GetExpenseSplitsByExpenseId(expenseId);
+            var userSplits = new Dictionary<string, decimal>();
+            foreach (var split in splits)
+            {
+                userSplits.Add(split.UserId, split.Amount);
+            }
+            return userSplits;
+        }
     }
 }
