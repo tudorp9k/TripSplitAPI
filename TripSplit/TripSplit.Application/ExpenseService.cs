@@ -1,4 +1,5 @@
-﻿using TripSplit.Domain;
+﻿using Microsoft.AspNetCore.Identity;
+using TripSplit.Domain;
 using TripSplit.Domain.Dto;
 using TripSplit.Domain.Interfaces;
 
@@ -8,11 +9,13 @@ namespace TripSplit.Application
     {
         private readonly IExpenseRepository expenseRepository;
         private readonly IExpenseSplitRepository expenseSplitRepository;
+        private readonly UserManager<User> userManager;
 
-        public ExpenseService(IExpenseRepository expenseRepository, IExpenseSplitRepository expenseSplitRepository)
+        public ExpenseService(IExpenseRepository expenseRepository, IExpenseSplitRepository expenseSplitRepository, UserManager<User> userManager)
         {
             this.expenseRepository = expenseRepository ?? throw new ArgumentNullException(nameof(expenseRepository));
             this.expenseSplitRepository = expenseSplitRepository ?? throw new ArgumentNullException(nameof(expenseSplitRepository));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task<CreateExpenseResponse> CreateExpense(CreateExpenseDto createExpenseDto)
@@ -29,11 +32,29 @@ namespace TripSplit.Application
         public async Task<GetExpensesResponse> GetExpensesByTripId(int tripId)
         {
             var expenses = await expenseRepository.GetExpensesByTripId(tripId);
-            var expensesDto = expenses.Select(e => MappingProfile.ExpenseToExpenseDto(e));
+            var expensesDto = new List<ExpenseDto>();
+            foreach (var expense in expenses)
+            {
+                string paidByName;
+                if (expense.UserId == null)
+                {
+                    paidByName = "Unknown";
+                }
+                else
+                {
+                    var paidByUser = await userManager.FindByIdAsync(expense.UserId);
+                    paidByName = $"{paidByUser.FirstName} {paidByUser.LastName}";
+                }
+                var expenseDto = MappingProfile.ExpenseToExpenseDto(expense);
+                expenseDto.PaidBy = paidByName;
+                expensesDto.Add(expenseDto);
+            }
+
             var expensesResponse = new GetExpensesResponse
             {
                 Expenses = expensesDto
             };
+
             return expensesResponse;
         }
 
