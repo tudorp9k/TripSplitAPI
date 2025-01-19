@@ -6,6 +6,6 @@ namespace TripSplit.Domain.Interfaces
     {
         Task<CreateExpenseResponse> CreateExpense(CreateExpenseDto createExpenseDto);
         Task<GetExpensesResponse> GetExpensesByTripId(int tripId);
-        Task SplitExpense(int expenseId, Dictionary<string, decimal> userSplits, bool isEqualSplit);
+        Task SplitExpense(int expenseId, Dictionary<string, decimal> userSplits);
     }
 }

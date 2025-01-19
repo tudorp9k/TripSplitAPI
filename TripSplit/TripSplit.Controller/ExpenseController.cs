@@ -31,8 +31,7 @@ namespace TripSplit.Controller
         [HttpPost("split")]
         public async Task SplitExpense(SplitExpensesRequest request)
         {
-            var isEqualSplit = true;
-            await expenseService.SplitExpense(request.ExpenseId, request.UserSplits, isEqualSplit);
+            await expenseService.SplitExpense(request.ExpenseId, request.UserSplits);
         }
     }
 }

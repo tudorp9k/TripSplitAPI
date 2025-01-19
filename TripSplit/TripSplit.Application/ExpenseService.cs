@@ -82,7 +82,7 @@ namespace TripSplit.Application
             return expensesResponse;
         }
 
-        public async Task SplitExpense(int expenseId, Dictionary<string, decimal> userSplits, bool isEqualSplit)
+        public async Task SplitExpense(int expenseId, Dictionary<string, decimal> userSplits)
         {
             var expense = await expenseRepository.GetExpenseById(expenseId);
             if (expense == null)
@@ -91,45 +91,16 @@ namespace TripSplit.Application
             }
 
             var splits = new List<ExpenseSplit>();
-            if (isEqualSplit)
-            {
-                var selectedUsers = userSplits.Keys.ToList();
-                var equalAmount = Math.Round(expense.Amount / selectedUsers.Count, 2);
-                foreach (var userId in selectedUsers)
-                {
-                    splits.Add(new ExpenseSplit
-                    {
-                        ExpenseId = expenseId,
-                        UserId = userId,
-                        Amount = equalAmount,
-                        IsPaid = false
-                    });
-                }
 
-                var remainingAmount = expense.Amount - splits.Sum(s => s.Amount);
-                if (remainingAmount > 0)
-                {
-                    splits.First().Amount += remainingAmount;
-                }
-            }
-            else
+            foreach (var userSplit in userSplits)
             {
-                var totalSplitAmount = userSplits.Values.Sum();
-                if (Math.Abs(totalSplitAmount - expense.Amount) > 0.01m)
+                splits.Add(new ExpenseSplit
                 {
-                    throw new Exception("Split amounts do not match the total expense amount.");
-                }
-
-                foreach (var userSplit in userSplits)
-                {
-                    splits.Add(new ExpenseSplit
-                    {
-                        ExpenseId = expenseId,
-                        UserId = userSplit.Key,
-                        Amount = userSplit.Value,
-                        IsPaid = false
-                    });
-                }
+                    ExpenseId = expenseId,
+                    UserId = userSplit.Key,
+                    Amount = userSplit.Value,
+                    IsPaid = false
+                });
             }
 
             await expenseSplitRepository.AddExpenseSplits(splits);
