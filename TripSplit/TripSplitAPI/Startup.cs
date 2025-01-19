@@ -54,8 +54,7 @@ namespace TripSplitAPI
             builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
             builder.Services.AddScoped<IExpenseSplitRepository, ExpenseSplitRepository>();
             builder.Services.AddScoped<IExpenseService, ExpenseService>();
-
-
+            builder.Services.AddScoped<IPdfWriterService, PdfWriterService>();
         }
 
         public static void ConfigureApp(WebApplication app)

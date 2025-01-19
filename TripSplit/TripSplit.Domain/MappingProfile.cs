@@ -76,7 +76,8 @@ namespace TripSplit.Domain
                 Amount = createExpenseDto.Amount,
                 Description = createExpenseDto.Description,
                 Date = createExpenseDto.Date,
-                TripId = createExpenseDto.TripId
+                TripId = createExpenseDto.TripId,
+                UserId = createExpenseDto.UserId,
             };
         }
 
@@ -86,6 +87,7 @@ namespace TripSplit.Domain
             {
                 Id = expense.Id,
                 TripId = expense.TripId,
+                UserId = expense.UserId,
                 Name = expense.Name,
                 Amount = expense.Amount,
                 Description = expense.Description,
