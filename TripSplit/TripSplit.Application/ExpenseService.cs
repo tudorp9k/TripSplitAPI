@@ -48,6 +48,30 @@ namespace TripSplit.Application
                 var expenseDto = MappingProfile.ExpenseToExpenseDto(expense);
                 expenseDto.PaidBy = paidByName;
                 expensesDto.Add(expenseDto);
+
+                var splits = await expenseSplitRepository.GetExpenseSplitsByExpenseId(expense.Id);
+
+                if (splits == null)
+                {
+                    continue;
+                }
+
+                foreach (var split in splits)
+                {
+                    var contributorUser = await userManager.FindByIdAsync(split.UserId);
+                    var contributorName = $"{contributorUser.FirstName} {contributorUser.LastName}";
+
+                    if (expenseDto.Contributors == null)
+                    {
+                        expenseDto.Contributors = new List<ContributorDto>();
+                    }
+
+                    expenseDto.Contributors.Add(new ContributorDto
+                    {
+                        Name = contributorName,
+                        Amount = split.Amount,
+                    });
+                }
             }
 
             var expensesResponse = new GetExpensesResponse
@@ -111,15 +135,5 @@ namespace TripSplit.Application
             await expenseSplitRepository.AddExpenseSplits(splits);
         }
 
-        public async Task<Dictionary<string, decimal>> GetExpensesSplitByExpenseId(int expenseId)
-        {
-            var splits = await expenseSplitRepository.GetExpenseSplitsByExpenseId(expenseId);
-            var userSplits = new Dictionary<string, decimal>();
-            foreach (var split in splits)
-            {
-                userSplits.Add(split.UserId, split.Amount);
-            }
-            return userSplits;
-        }
     }
 }

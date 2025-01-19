@@ -94,5 +94,13 @@ namespace TripSplit.Domain
                 Date = expense.Date,
             };
         }
+
+        public static ContributorDto ExpenseSplitToContributor(ExpenseSplit expenseSplit)
+        {
+            return new ContributorDto
+            {
+                Amount = expenseSplit.Amount,
+            };
+        }
     }
 }
